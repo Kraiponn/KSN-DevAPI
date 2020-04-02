@@ -18,6 +18,10 @@ connectDB();
 
 const app = express();
 
+// Include resource routers
+const auth = require('./routes/auth');
+
+
 // Set logged for show http request
 if(process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
@@ -39,7 +43,7 @@ app.use(helmet());
 app.use(cors());
 
 // Mount routers
-
+app.use('/api/v1/auth', auth);
 
 // Handle error 
 app.use(errorHandler);

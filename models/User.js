@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
     unique: true,
     required: [true, "Please add an email"],
     match: [
-      //,
+      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
       "Please add a valid email"
     ]
   },
@@ -37,8 +37,8 @@ const userSchema = new mongoose.Schema({
   }
 });
 
-// Hash password
-userSchema.pre("save", async next => {
+// Hash password isModified
+userSchema.pre("save", async function(next) {
   if (!this.isModified('password')) {
     next();
   }
@@ -48,7 +48,7 @@ userSchema.pre("save", async next => {
 });
 
 // Get JWT Token
-userSchema.methods.getSignJwtToken = () => {
+userSchema.methods.getSignJwtToken = function() {
   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRE
   });
